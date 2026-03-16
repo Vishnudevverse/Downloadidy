@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Downloadidy",
-  "version": "1.1.0",
+  "version": "1.4.0",
   "description": "Intelligence for your downloads. Route, rename, and rule your filesystem.",
   "permissions": ["downloads", "storage", "activeTab"],
   "background": {

@@ -21,3 +21,26 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     }
   }
 });
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === 'downloadGroup') {
+    chrome.storage.sync.get('groups', (data) => {
+      const group = data.groups[request.groupName];
+      if (group) {
+        for (const url of group.urls) {
+          chrome.downloads.download({ url });
+        }
+      }
+    });
+  } else if (request.action === 'deleteGroup') {
+    chrome.storage.sync.get('groups', (data) => {
+      const groups = data.groups;
+      if (groups && groups[request.groupName]) {
+        delete groups[request.groupName];
+        chrome.storage.sync.set({ groups }, () => {
+          chrome.runtime.sendMessage({ action: 'groupDeleted' });
+        });
+      }
+    });
+  }
+});

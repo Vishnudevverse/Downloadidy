@@ -20,6 +20,16 @@ function renderGroups(groups) {
     });
     listItem.appendChild(downloadButton);
 
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Delete';
+    deleteButton.addEventListener('click', () => {
+      chrome.runtime.sendMessage({
+        action: 'deleteGroup',
+        groupName: groupName
+      });
+    });
+    listItem.appendChild(deleteButton);
+
     groupList.appendChild(listItem);
   }
 }
@@ -27,5 +37,17 @@ function renderGroups(groups) {
 chrome.storage.sync.get('groups', (data) => {
   if (data.groups) {
     renderGroups(data.groups);
+  }
+});
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === 'groupDeleted') {
+    chrome.storage.sync.get('groups', (data) => {
+      if (data.groups) {
+        renderGroups(data.groups);
+      } else {
+        groupList.innerHTML = '';
+      }
+    });
   }
 });

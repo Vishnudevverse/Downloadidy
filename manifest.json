@@ -5,10 +5,10 @@
   "description": "Intelligence for your downloads. Route, rename, and rule your filesystem.",
   "permissions": ["downloads", "storage", "activeTab"],
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "js/background.js"
   },
   "action": {
-    "default_popup": "popup.html",
+    "default_popup": "index.html",
     "default_title": "Download Director"
   },
   "commands": {

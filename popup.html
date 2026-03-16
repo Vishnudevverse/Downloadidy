@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="popup.css">
 </head>
+
 <body>
   <div class="container">
-    
+
+
     <div class="setting-row primary">
       <div class="top-controls">
         <div class="top-control-item">
@@ -18,72 +21,94 @@
           <label for="siteEnabled" class="currentDomainLabel top-label site-label">This Site</label>
         </div>
       </div>
-      <button id="openDownloadsBtn" class="btn-secondary btn-small icon-btn" title="Open Downloads" aria-label="Open Downloads">
+      <button id="openDownloadsBtn" class="btn-secondary btn-small icon-btn" title="Open Downloads"
+        aria-label="Open Downloads">
         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="btn-icon">
-          <path d="M12 4v11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          <path d="M8 11l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M5 19h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M12 4v11" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          <path d="M8 11l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" />
+          <path d="M5 19h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
         </svg>
       </button>
       <button id="topSaveBtn" class="btn-primary btn-small icon-btn" title="Save" aria-label="Save">
         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="btn-icon">
-          <path d="M5 3h11l3 3v15H5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-          <path d="M8 3h8v6H8z" fill="none" stroke="currentColor" stroke-width="1.8"/>
-          <path d="M8 15h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M5 3h11l3 3v15H5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+          <path d="M8 3h8v6H8z" fill="none" stroke="currentColor" stroke-width="1.8" />
+          <path d="M8 15h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
         </svg>
       </button>
     </div>
-    
-    <div id="main-content">
-
-    <div class="custom-path-box" id="custom-path-box">
-      <div class="section-title-row">
-        <strong>Custom Path</strong>
-      </div>
-      <div id="custom-path-content">
-        <div class="radio-group">
-          <label id="globalLabel"><input type="radio" name="pathScope" value="global"> Global</label>
-          <label><input type="radio" name="pathScope" value="domain" checked> <span class="currentDomainLabel">This Site</span></label>
-        </div>
-        <div class="input-row">
-          <input type="text" id="customPathInput" placeholder="e.g. Work/Projects">
-          <button id="clearPathBtn" class="btn-small btn-danger">Clear</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="keyword-section custom-path-box" id="keyword-section-wrapper">
-      <div class="section-title-row section-title-gap">
-        <strong>Keyword Rules</strong>
-      </div>
-      <div class="radio-group">
-        <label id="kwGlobalLabel"><input type="radio" name="kwScope" value="global"> Global</label>
-        <label><input type="radio" name="kwScope" value="domain" checked> <span class="currentDomainLabel">This Site</span></label>
-      </div>
-      <div id="keyword-rows-container"></div>
-      <button id="addKeywordBtn" class="btn-small btn-secondary">+ Add Keyword Rule</button>
-    </div>
-
-    <hr>
-    
-    <div class="rules-header-row">
-      <p class="description">Drag ☰ icon to reorder folders.</p>
-      <div class="rules-toggle-row">
-        <input type="checkbox" id="useGlobalOrder" class="modern-checkbox" checked>
-        <label for="useGlobalOrder" id="useGlobalOrderLabel" class="global-order-label">Global</label>
-      </div>
-    </div>
-    
-    <div id="rule-list"></div>
-    
-    </div><!-- main-content -->
-
     <div class="next-name-box" id="nextNameBox">
       <div class="next-name-title">Next Download Name (One-time)</div>
       <input type="text" id="oneTimeDownloadName" placeholder="Type filename text (without extension)">
       <div class="next-name-hint">Original extension is kept automatically.</div>
-      <div class="next-name-shortcut">Fast open: <kbd>Alt+R</kbd> -> popup opens -> this field auto-focuses for quick predownload rename.</div>
+      <div class="next-name-shortcut">Fast open: <kbd>Alt+R</kbd> -> popup opens -> this field auto-focuses for quick
+        predownload rename.</div>
     </div>
+    <div id="main-content">
+
+      <div class="custom-path-box" id="custom-path-box">
+        <div class="section-title-row">
+          <strong>Custom Path</strong>
+        </div>
+        <div id="custom-path-content">
+          <div class="radio-group">
+            <label id="globalLabel"><input type="radio" name="pathScope" value="global"> Global</label>
+            <label><input type="radio" name="pathScope" value="domain" checked> <span class="currentDomainLabel">This
+                Site</span></label>
+          </div>
+          <div class="input-row">
+            <input type="text" id="customPathInput" placeholder="e.g. Work/Projects">
+            <button id="clearPathBtn" class="btn-small btn-danger">Clear</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="custom-path-box" id="folder-name-box" style="display: none;">
+        <div class="section-title-row">
+          <strong>Folder Name</strong>
+        </div>
+        <div class="setting-row">
+          <span>Preview: <span id="folderNamePreview" style="font-weight: bold; color: #1a73e8;"></span></span>
+        </div>
+        <div id="folder-name-content">
+          <div class="setting-row" style="margin-top: 6px;">
+            <input type="checkbox" id="useDefaultFolderName" class="modern-checkbox" checked>
+            <label for="useDefaultFolderName">Use Default Folder Name</label>
+          </div>
+          <div id="folderNameSegments" class="segment-container" style="display: none;">
+            <!-- Domain segments will be injected here -->
+          </div>
+        </div>
+      </div>
+
+      <div class="keyword-section custom-path-box" id="keyword-section-wrapper">
+        <div class="section-title-row section-title-gap">
+          <strong>Keyword Rules</strong>
+        </div>
+        <div class="radio-group">
+          <label id="kwGlobalLabel"><input type="radio" name="kwScope" value="global"> Global</label>
+          <label><input type="radio" name="kwScope" value="domain" checked> <span class="currentDomainLabel">This
+              Site</span></label>
+        </div>
+        <div id="keyword-rows-container"></div>
+        <button id="addKeywordBtn" class="btn-small btn-secondary">+ Add Keyword Rule</button>
+      </div>
+
+      <hr>
+
+      <div class="rules-header-row">
+        <p class="description">Drag ☰ icon to reorder folders.</p>
+        <div class="rules-toggle-row">
+          <input type="checkbox" id="useGlobalOrder" class="modern-checkbox" checked>
+          <label for="useGlobalOrder" id="useGlobalOrderLabel" class="global-order-label">Global</label>
+        </div>
+      </div>
+
+      <div id="rule-list"></div>
+
+    </div><!-- main-content -->
+
 
     <div class="theme-switcher" id="themeSwitcher">
       <span class="theme-label">Theme</span>
@@ -94,30 +119,32 @@
       </div>
     </div>
 
-<div class="download-tip" id="downloadSettingTip">
-  <strong>Quick Setup Tips:</strong>
-  <ul>
-    <li>
-      For best results, disable <strong>"Ask where to save each file before downloading"</strong> in your browser settings.
-    </li>
-    <li>
-      To use a specific folder, <strong>change your download directory</strong> in the settings menu.
-    </li>
-    <li>
-      <strong>Pin the extension</strong> to your toolbar for one-click access to your downloads and settings.
-    </li>
-  </ul>
-  <button id="openSettingsBtn" class="btn-link" type="button">Open Edge Download Settings</button>
-</div>
+    <div class="download-tip" id="downloadSettingTip">
+      <strong>Quick Setup Tips:</strong>
+      <ul>
+        <li>
+          For best results, disable <strong>"Ask where to save each file before downloading"</strong> in your browser
+          settings.
+        </li>
+        <li>
+          To use a specific folder, <strong>change your download directory</strong> in the settings menu.
+        </li>
+        <li>
+          <strong>Pin the extension</strong> to your toolbar for one-click access to your downloads and settings.
+        </li>
+      </ul>
+      <button id="openSettingsBtn" class="btn-link" type="button">Open Edge Download Settings</button>
+    </div>
 
-      <section class="user-req" style="display: flex; justify-content: start; flex-wrap: wrap; gap: 15px;">
-        <a href="https://github.com/Vishnudevverse/---/blob/master/LICENSE">License</a>
-        <a href="https://github.com/Vishnudevverse/---/blob/master/PRIVACY.md">Privacy Policy</a>
-        <a href="https://github.com/Vishnudevverse/---/tree/master">GitHub Repository</a>
-        <a href="https://github.com/Vishnudevverse/---/blob/master/Help.md">Help</a>
-        <a href="https://github.com/Vishnudevverse/---/blob/master/FAQ.md">FAQ</a>
-      </section>
+    <section class="user-req" style="display: flex; justify-content: start; flex-wrap: wrap; gap: 15px;">
+      <a href="https://github.com/Vishnudevverse/---/blob/master/LICENSE">License</a>
+      <a href="https://github.com/Vishnudevverse/---/blob/master/PRIVACY.md">Privacy Policy</a>
+      <a href="https://github.com/Vishnudevverse/---/tree/master">GitHub Repository</a>
+      <a href="https://github.com/Vishnudevverse/---/blob/master/Help.md">Help</a>
+      <a href="https://github.com/Vishnudevverse/---/blob/master/FAQ.md">FAQ</a>
+    </section>
   </div>
   <script src="popup.js"></script>
 </body>
+
 </html>

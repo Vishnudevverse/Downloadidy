@@ -47,7 +47,8 @@ document.addEventListener('DOMContentLoaded', () => {
         globalRuleOrder: cleanedGlobalOrder,
         siteRuleOrders: cleanedSiteOrders,
         siteRuleEnabled: result.siteRuleEnabled || {},
-        useSiteRuleOrder: result.useSiteRuleOrder || {}
+        useSiteRuleOrder: result.useSiteRuleOrder || {},
+        folderNameConfig: result.folderNameConfig || {}
       };
 
       themePreference = ['light', 'dark', 'system'].includes(result.themePreference) ? result.themePreference : 'system';
@@ -162,6 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
       renderRuleList();
       toggleKeywordSection();
       toggleCustomPathSection();
+      toggleFolderNameSection();
       checkDirty();
     });
 
@@ -170,6 +172,8 @@ document.addEventListener('DOMContentLoaded', () => {
     renderKwUI();
     toggleKeywordSection();
     toggleCustomPathSection();
+    renderFolderNameUI();
+    toggleFolderNameSection();
     updateGreyOutState();
   }
 
@@ -228,6 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (id === 'byKeyword') toggleKeywordSection();
         if (id === 'byCustomPath') toggleCustomPathSection();
+        if (id === 'byDomain') toggleFolderNameSection();
         checkDirty();
       });
     });
@@ -252,6 +257,116 @@ document.addEventListener('DOMContentLoaded', () => {
       checkDirty();
     });
     container.addEventListener('dragover', (e) => { e.preventDefault(); const after = [...container.querySelectorAll('.draggable:not(.dragging)')].reduce((closest, child) => { const box = child.getBoundingClientRect(); const offset = e.clientY - box.top - box.height / 2; return (offset < 0 && offset > closest.offset) ? { offset, element: child } : closest; }, { offset: Number.NEGATIVE_INFINITY }).element; after ? container.insertBefore(draggedItem, after) : container.appendChild(draggedItem); });
+  }
+
+  // --- FOLDER NAME LOGIC ---
+  function renderFolderNameUI() {
+    const domainConfig = localState.folderNameConfig[currentDomain] || {};
+    const useDefaultFolderName = document.getElementById('useDefaultFolderName');
+    const folderNameSegments = document.getElementById('folderNameSegments');
+    
+    useDefaultFolderName.checked = domainConfig.useDefault !== false;
+    
+    useDefaultFolderName.removeEventListener('change', handleDefaultFolderChange);
+    useDefaultFolderName.addEventListener('change', handleDefaultFolderChange);
+    
+    folderNameSegments.removeEventListener('change', handleSegmentChange);
+    folderNameSegments.addEventListener('change', handleSegmentChange);
+
+    updateFolderSegmentsVisibility();
+    updateFolderNamePreview();
+  }
+
+  function handleDefaultFolderChange(e) {
+    if (!localState.folderNameConfig[currentDomain]) localState.folderNameConfig[currentDomain] = {};
+    localState.folderNameConfig[currentDomain].useDefault = e.target.checked;
+    updateFolderSegmentsVisibility();
+    updateFolderNamePreview();
+    checkDirty();
+  }
+
+  function handleSegmentChange(e) {
+    if (e.target.type === 'checkbox') {
+      const selectedSegments = getSelectedSegments();
+      if (!localState.folderNameConfig[currentDomain]) localState.folderNameConfig[currentDomain] = {};
+      localState.folderNameConfig[currentDomain].segments = selectedSegments;
+      updateFolderNamePreview();
+      checkDirty();
+    }
+  }
+
+  function updateFolderSegmentsVisibility() {
+    const useDefault = document.getElementById('useDefaultFolderName').checked;
+    const folderNameSegments = document.getElementById('folderNameSegments');
+    if (useDefault) {
+      folderNameSegments.style.display = 'none';
+      folderNameSegments.innerHTML = '';
+    } else {
+      generateAndShowSegments();
+    }
+  }
+
+  function generateAndShowSegments() {
+    const folderNameSegments = document.getElementById('folderNameSegments');
+    folderNameSegments.innerHTML = '';
+    const parts = currentDomain.split('.');
+    const commonSubdomains = ['www', 'web'];
+    const commonTlds = ['com', 'org', 'net', 'io', 'dev', 'co', 'gov', 'edu'];
+    const sldIndex = parts.length > 2 ? parts.length - 2 : 0;
+    const sld = parts[sldIndex];
+    
+    const domainConfig = localState.folderNameConfig[currentDomain] || {};
+
+    parts.forEach((part, index) => {
+      const isSld = (part === sld);
+      const isCommonSubdomain = commonSubdomains.includes(part);
+      const isCommonTld = commonTlds.includes(part) && index === parts.length - 1;
+
+      let isChecked;
+      if (domainConfig.segments) {
+        isChecked = domainConfig.segments.includes(part);
+      } else {
+        isChecked = isSld && !isCommonSubdomain && !isCommonTld;
+      }
+
+      const segmentId = `segment-${part}-${index}`;
+      const segmentItem = document.createElement('div');
+      segmentItem.className = 'segment-item';
+      segmentItem.innerHTML = `
+        <input type="checkbox" id="${segmentId}" class="modern-checkbox" data-segment="${part}" ${isChecked ? 'checked' : ''}>
+        <label for="${segmentId}">${part}</label>
+      `;
+      folderNameSegments.appendChild(segmentItem);
+    });
+
+    folderNameSegments.style.display = 'flex';
+  }
+
+  function getSelectedSegments() {
+    return Array.from(document.getElementById('folderNameSegments').querySelectorAll('input:checked'))
+      .map(input => input.dataset.segment);
+  }
+
+  function updateFolderNamePreview() {
+    const useDefault = document.getElementById('useDefaultFolderName').checked;
+    const previewEl = document.getElementById('folderNamePreview');
+    if (useDefault) {
+      const parts = currentDomain.split('.');
+      if (parts.length > 1) {
+        previewEl.textContent = parts[parts.length - 2];
+      } else {
+        previewEl.textContent = currentDomain;
+      }
+    } else {
+      const selected = getSelectedSegments();
+      previewEl.textContent = selected.join('_') || 'No_Folder_Selected';
+    }
+  }
+
+  function toggleFolderNameSection() {
+    const box = document.getElementById('folder-name-box');
+    box.style.display = getRuleEnabledForCurrentMode('byDomain') ? 'flex' : 'none';
+    updateSectionPairVisibility();
   }
 
   // --- PATH LOGIC ---
@@ -333,12 +448,23 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function updateSectionPairVisibility() {
-    const customPathBox = document.getElementById('custom-path-box');
-    const keywordBox = document.getElementById('keyword-section-wrapper');
-    const bothEnabled = getRuleEnabledForCurrentMode('byCustomPath') && getRuleEnabledForCurrentMode('byKeyword');
-
-    customPathBox.classList.toggle('pair-visible', bothEnabled);
-    keywordBox.classList.toggle('pair-visible', bothEnabled);
+    const boxes = [
+      document.getElementById('custom-path-box'),
+      document.getElementById('folder-name-box'),
+      document.getElementById('keyword-section-wrapper')
+    ];
+    const visibleBoxes = boxes.filter(box => box.style.display !== 'none');
+    
+    boxes.forEach(box => {
+      box.classList.toggle('pair-visible', visibleBoxes.length > 1);
+      box.style.marginTop = ''; // Reset
+    });
+    
+    if (visibleBoxes.length > 1) {
+      visibleBoxes.forEach((box, index) => {
+        if (index > 0) box.style.marginTop = '10px';
+      });
+    }
   }
 
   function updateGreyOutState() {

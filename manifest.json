@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Downloadidy",
   "version": "1.6.0",
-  "description": "Intelligence for your downloads. Route, rename, and rule your filesystem.",
+  "description": "Take control of your downloads. Automatically route, rename, and organize files based on custom rules, keywords, and domains.",
   "permissions": ["downloads", "storage", "activeTab"],
   "background": {
     "service_worker": "js/background.js"

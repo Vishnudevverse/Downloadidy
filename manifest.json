@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Downloadidy",
-  "version": "1.6.0",
+  "version": "2.0.0",
   "description": "Take control of your downloads. Automatically route, rename, and organize files based on custom rules, keywords, and domains.",
   "permissions": ["downloads", "storage", "activeTab"],
   "background": {
@@ -14,15 +14,9 @@
   "commands": {
     "_execute_action": {
       "suggested_key": {
-        "default": "Ctrl+Shift+Y"
-      },
-      "description": "Open Grouper popup"
-    },
-    "open_grouper_popup": {
-      "suggested_key": {
         "default": "Alt+R"
       },
-      "description": "Open Grouper popup (fallback shortcut)"
+      "description": "Open Grouper popup"
     }
   }
 }

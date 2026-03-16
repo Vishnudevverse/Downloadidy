@@ -467,7 +467,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const isGlobal = document.getElementById('useGlobalOrder').checked;
     const orderArray = isGlobal ? localState.globalRuleOrder : (localState.siteRuleOrders[currentDomain] || localState.globalRuleOrder);
     
-    const pathParts = ['Downloads'];
+    const pathParts = ['.'];
     
     // Evaluate parts dynamically using an object map
     const ruleHandlers = {

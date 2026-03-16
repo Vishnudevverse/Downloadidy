@@ -5,7 +5,21 @@ function renderGroups(groups) {
   for (const groupName in groups) {
     const group = groups[groupName];
     const listItem = document.createElement('li');
-    listItem.textContent = `${groupName} (${group.urls.length})`;
+    
+    const groupNameSpan = document.createElement('span');
+    groupNameSpan.textContent = `${groupName} (${group.urls.length})`;
+    listItem.appendChild(groupNameSpan);
+
+    const downloadButton = document.createElement('button');
+    downloadButton.textContent = 'Download';
+    downloadButton.addEventListener('click', () => {
+      chrome.runtime.sendMessage({
+        action: 'downloadGroup',
+        groupName: groupName
+      });
+    });
+    listItem.appendChild(downloadButton);
+
     groupList.appendChild(listItem);
   }
 }

@@ -84,7 +84,7 @@ If a download URL is `blob:` or `data:`, Downloadidy resolves the domain from yo
 
 ## Changelog
 
-**v1.6.0 (current)**
+**v2.0.0 (current)**
 - Fix: `blob:`/`data:` downloads now use the active tab domain instead of defaulting to `Other`.
 - Docs: README/FAQ/Help refreshed for production use.
 - Chore: Folder structure reorganized into `js/`, `css/`, `assets/`.

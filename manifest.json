@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "Downloadidy",
+  "version": "1.0.0",
+  "description": "Intelligence for your downloads. Route, rename, and rule your filesystem.",
+  "permissions": ["downloads", "storage", "activeTab"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Download Director"
+  },
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+Y"
+      },
+      "description": "Open Grouper popup"
+    },
+    "open_grouper_popup": {
+      "suggested_key": {
+        "default": "Alt+R"
+      },
+      "description": "Open Grouper popup (fallback shortcut)"
+    }
+  }
+}

@@ -132,26 +132,42 @@ chrome.downloads.onDeterminingFilename.addListener((item, suggest) => {
       let targetUrl = item.referrer || item.url;
       if (targetUrl.startsWith('blob:')) targetUrl = targetUrl.substring(5);
       let domain = 'Other';
-      try { domain = new URL(targetUrl).hostname.replace(/^www\./, ''); } catch (e) { }
+      try {
+        domain = new URL(targetUrl).hostname.replace(/^www\./, '');
+      } catch (e) { }
+      if (!domain) domain = 'Other';
 
-      if (result.disabledDomains && result.disabledDomains[domain]) return suggest();
+      const processDownload = (resolvedDomain) => {
+        if (result.disabledDomains && result.disabledDomains[resolvedDomain]) return suggest();
 
-      const basename = item.filename.split(/[\/\\]/).pop() || item.filename;
-      const oneTimeText = sanitizeOneTimeNameText(result.oneTimePreDownloadName);
-      const basenameForDownload = oneTimeText ? `${oneTimeText}${getExtensionPart(basename)}` : basename;
+        const basename = item.filename.split(/[\/\\]/).pop() || item.filename;
+        const oneTimeText = sanitizeOneTimeNameText(result.oneTimePreDownloadName);
+        const basenameForDownload = oneTimeText ? `${oneTimeText}${getExtensionPart(basename)}` : basename;
 
-      const finalPath = buildFinalPath(item, result, domain, basenameForDownload);
-      suggest({ filename: finalPath, conflictAction: 'uniquify' });
+        const finalPath = buildFinalPath(item, result, resolvedDomain, basenameForDownload);
+        suggest({ filename: finalPath, conflictAction: 'uniquify' });
 
-      // One-time value is consumed by the first detected download only.
-      if (oneTimeText) {
-        chrome.storage.local.set({ oneTimePreDownloadName: '' }, () => {
-          chrome.runtime.sendMessage({ type: 'oneTimeNameConsumed' }, () => {
-            void chrome.runtime.lastError;
+        if (oneTimeText) {
+          chrome.storage.local.set({ oneTimePreDownloadName: '' }, () => {
+            chrome.runtime.sendMessage({ type: 'oneTimeNameConsumed' }, () => {
+              void chrome.runtime.lastError;
+            });
           });
-        });
-      }
+        }
+      };
 
+      if (domain === 'Other') {
+        chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
+          if (tabs && tabs.length > 0 && tabs[0].url) {
+            try {
+              domain = new URL(tabs[0].url).hostname.replace(/^www\./, '') || 'Other';
+            } catch (e) {}
+          }
+          processDownload(domain);
+        });
+      } else {
+        processDownload(domain);
+      }
     } catch (error) {
       console.error("Routing error:", error);
       suggest();

@@ -16,7 +16,6 @@ hr { border: 0; border-top: 1px solid #ddd; margin: 4px 0; }
 .currentDomainLabel { display: inline-block; min-width: 0; max-width: 84px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .section-title-row { display: flex; justify-content: space-between; align-items: center; }
-.section-title-gap { margin-bottom: 8px; }
 .input-row { display: flex; gap: 6px; }
 #customPathInput { flex: 1; }
 #addKeywordBtn { margin-top: 6px; width: 100%; }
@@ -24,12 +23,13 @@ hr { border: 0; border-top: 1px solid #ddd; margin: 4px 0; }
 .rules-toggle-row { display: flex; align-items: center; gap: 6px; }
 .global-order-label { font-size: 12px; font-weight: bold; cursor: pointer; color: #1a73e8; }
 
-.custom-path-box { background: #e8f0fe; padding: 12px; border-radius: 6px; display: flex; flex-direction: column; gap: 8px; font-size: 13px; }
+.path-preview-box { background: #eef2f5; padding: 10px 12px; border-radius: 6px; display: flex; flex-direction: column; gap: 6px; font-size: 13px; border: 1px solid #c9d7e5; margin-bottom: 10px; }
+.path-preview-content { font-family: 'Consolas', 'Courier New', monospace; font-size: 11.5px; color: #444; word-break: break-all; }
+
+.custom-path-box { background: #e8f0fe; padding: 12px; border-radius: 6px; display: flex; flex-direction: column; gap: 8px; font-size: 13px; border: 1px solid #adccf7; margin-bottom: 10px; }
 #custom-path-content { display: flex; flex-direction: column; gap: 8px; }
 .radio-group { display: flex; gap: 12px; margin-bottom: 2px; }
 .custom-path-box input[type="text"] { padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-.pair-visible { border: 1px solid #adccf7; }
-#keyword-section-wrapper.pair-visible { margin-top: 10px; }
 
 button { padding: 8px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; color: white; transition: background 0.2s, color 0.2s; }
 .btn-primary { background: #1a73e8; } .btn-primary:hover { background: #1557b0; }
@@ -74,8 +74,7 @@ button { padding: 8px; border: none; border-radius: 4px; cursor: pointer; font-w
 [data-theme="dark"] #siteEnabledWrapper { border-left-color: #3a3a3a !important; }
 [data-theme="dark"] .currentDomainLabel { color: #82b1ff !important; }
 [data-theme="dark"] .description { color: #b7b7b7; }
-[data-theme="dark"] .custom-path-box { background: #1f2a3d; }
-[data-theme="dark"] .pair-visible { border-color: #3e5b80; }
+[data-theme="dark"] .custom-path-box { background: #1f2a3d; border-color: #3e5b80; }
 [data-theme="dark"] .draggable { background: #1d1d1d; border-color: #3a3a3a; color: #e6e6e6; box-shadow: none; }
 [data-theme="dark"] .drag-handle { color: #7f7f7f; }
 [data-theme="dark"] input[type="text"],
@@ -89,6 +88,8 @@ button { padding: 8px; border: none; border-radius: 4px; cursor: pointer; font-w
 [data-theme="dark"] .next-name-hint,
 [data-theme="dark"] .next-name-shortcut { color: #b9b9b9; }
 [data-theme="dark"] .next-name-shortcut kbd { border-color: #555; background: #1b1b1b; color: #ddd; }
+[data-theme="dark"] .path-preview-box { background: #1a2333; border-color: #3e5b80; }
+[data-theme="dark"] .path-preview-content { color: #82b1ff; }
 [data-theme="dark"] #oneTimeDownloadName { background: #141414; color: #ececec; border-color: #444; }
 [data-theme="dark"] .download-tip { color: #b9b9b9; }
 [data-theme="dark"] .download-tip em { color: #ececec; }

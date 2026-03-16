@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1A2A3A" />
+      <stop offset="100%" stop-color="#0F1722" />
+    </linearGradient>
+    <linearGradient id="primary" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3B82F6" />
+      <stop offset="100%" stop-color="#2563EB" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background rounded squircle -->
+  <rect x="16" y="16" width="224" height="224" rx="40" fill="url(#bgGrad)" />
+
+  <!-- Clean, minimal folder icon -->
+  <!-- Folder Back/Body -->
+  <path d="M56,88 L104,88 L120,104 L200,104 C208.8,104 216,111.2 216,120 L216,184 C216,192.8 208.8,200 200,200 L56,200 C47.2,200 40,192.8 40,184 L40,104 C40,95.2 47.2,88 56,88 Z" fill="none" stroke="url(#primary)" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" />
+
+  <!-- Minimal Download Arrow -->
+  <path d="M128,56 L128,144 M96,112 L128,144 L160,112" stroke="#FFFFFF" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+  
+  <!-- Arrow stem cutout for the folder body -->
+  <path d="M128,104 L128,144" stroke="#FFFFFF" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+</svg>

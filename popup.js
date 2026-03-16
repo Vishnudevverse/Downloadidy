@@ -64,6 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
     oneTimeNameInput.addEventListener('input', (e) => {
       localState.oneTimePreDownloadName = e.target.value;
       chrome.storage.local.set({ oneTimePreDownloadName: e.target.value });
+      updatePathPreview();
     });
 
     // Focus directly in the one-time name field when popup opens.
@@ -175,6 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderFolderNameUI();
     toggleFolderNameSection();
     updateGreyOutState();
+    updatePathPreview();
   }
 
   function applyTheme(mode) {
@@ -199,9 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function getRuleEnabledForCurrentMode(ruleId) {
     const isGlobal = document.getElementById('useGlobalOrder').checked;
     if (isGlobal) return localState[ruleId] === true;
-    const siteEnabled = (localState.siteRuleEnabled && localState.siteRuleEnabled[currentDomain]) || {};
-    if (Object.prototype.hasOwnProperty.call(siteEnabled, ruleId)) return siteEnabled[ruleId] === true;
-    return localState[ruleId] === true;
+    return localState.siteRuleEnabled?.[currentDomain]?.[ruleId] ?? localState[ruleId] === true;
   }
 
   function renderRuleList() {
@@ -209,14 +209,14 @@ document.addEventListener('DOMContentLoaded', () => {
     listContainer.innerHTML = ''; 
     const isGlobal = document.getElementById('useGlobalOrder').checked;
     
-    let currentOrderArray = isGlobal ? localState.globalRuleOrder : (localState.siteRuleOrders[currentDomain] || [...localState.globalRuleOrder]);
+    const currentOrderArray = isGlobal ? localState.globalRuleOrder : (localState.siteRuleOrders[currentDomain] || [...localState.globalRuleOrder]);
 
     const labels = { 
       byDomain: "Group by Domain", byDate: "Group by Date", byFileType: "Group by File Type", byKeyword: "By Keyword Rules", byCustomPath: "Custom Path"
     };
     
     currentOrderArray.forEach(id => {
-      if (!labels[id]) return; // Failsafe against rendering old deleted rules
+      if (!labels[id]) return; 
       const row = document.createElement('div');
       row.className = 'draggable'; row.draggable = true; row.dataset.id = id;
       row.innerHTML = `<span class="drag-handle">☰</span><span class="label-text">${labels[id]}</span><input type="checkbox" id="${id}" class="modern-checkbox" ${getRuleEnabledForCurrentMode(id) ? 'checked' : ''}>`;
@@ -226,13 +226,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isGlobal) {
           localState[id] = e.target.checked;
         } else {
-          if (!localState.siteRuleEnabled) localState.siteRuleEnabled = {};
-          if (!localState.siteRuleEnabled[currentDomain]) localState.siteRuleEnabled[currentDomain] = {};
+          localState.siteRuleEnabled[currentDomain] ??= {};
           localState.siteRuleEnabled[currentDomain][id] = e.target.checked;
         }
-        if (id === 'byKeyword') toggleKeywordSection();
-        if (id === 'byCustomPath') toggleCustomPathSection();
-        if (id === 'byDomain') toggleFolderNameSection();
+        
+        const toggles = {
+          byKeyword: toggleKeywordSection,
+          byCustomPath: toggleCustomPathSection,
+          byDomain: toggleFolderNameSection
+        };
+        toggles[id]?.();
+        
         checkDirty();
       });
     });
@@ -366,7 +370,6 @@ document.addEventListener('DOMContentLoaded', () => {
   function toggleFolderNameSection() {
     const box = document.getElementById('folder-name-box');
     box.style.display = getRuleEnabledForCurrentMode('byDomain') ? 'flex' : 'none';
-    updateSectionPairVisibility();
   }
 
   // --- PATH LOGIC ---
@@ -378,7 +381,6 @@ document.addEventListener('DOMContentLoaded', () => {
   function toggleCustomPathSection() {
     const box = document.getElementById('custom-path-box');
     box.style.display = getRuleEnabledForCurrentMode('byCustomPath') ? 'flex' : 'none';
-    updateSectionPairVisibility();
   }
 
   // --- KEYWORD LOGIC ---
@@ -444,27 +446,6 @@ document.addEventListener('DOMContentLoaded', () => {
   function toggleKeywordSection() {
     const kwSection = document.getElementById('keyword-section-wrapper');
     kwSection.style.display = getRuleEnabledForCurrentMode('byKeyword') ? 'flex' : 'none';
-    updateSectionPairVisibility();
-  }
-
-  function updateSectionPairVisibility() {
-    const boxes = [
-      document.getElementById('custom-path-box'),
-      document.getElementById('folder-name-box'),
-      document.getElementById('keyword-section-wrapper')
-    ];
-    const visibleBoxes = boxes.filter(box => box.style.display !== 'none');
-    
-    boxes.forEach(box => {
-      box.classList.toggle('pair-visible', visibleBoxes.length > 1);
-      box.style.marginTop = ''; // Reset
-    });
-    
-    if (visibleBoxes.length > 1) {
-      visibleBoxes.forEach((box, index) => {
-        if (index > 0) box.style.marginTop = '10px';
-      });
-    }
   }
 
   function updateGreyOutState() {
@@ -482,8 +463,49 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function updatePathPreview() {
+    const isGlobal = document.getElementById('useGlobalOrder').checked;
+    const orderArray = isGlobal ? localState.globalRuleOrder : (localState.siteRuleOrders[currentDomain] || localState.globalRuleOrder);
+    
+    const pathParts = ['Downloads'];
+    
+    // Evaluate parts dynamically using an object map
+    const ruleHandlers = {
+      byDomain: () => {
+        const useDefault = document.getElementById('useDefaultFolderName').checked;
+        if (useDefault) {
+          const parts = currentDomain.split('.');
+          return parts.length > 1 ? parts[parts.length - 2] : currentDomain;
+        }
+        const selected = getSelectedSegments();
+        return selected.length ? selected.join('_') : 'No_Folder_Selected';
+      },
+      byDate: () => {
+        const now = new Date();
+        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        return `${now.getFullYear()}-${months[now.getMonth()]}`;
+      },
+      byFileType: () => '<Ext>',
+      byKeyword: () => '<Keyword>',
+      byCustomPath: () => document.getElementById('customPathInput').value.trim() || null
+    };
+
+    orderArray.forEach(rule => {
+      if (!getRuleEnabledForCurrentMode(rule)) return;
+      const part = ruleHandlers[rule]?.();
+      if (part) pathParts.push(part);
+    });
+
+    const oneTime = document.getElementById('oneTimeDownloadName')?.value.trim();
+    pathParts.push(oneTime || '<filename>');
+
+    const previewContent = document.getElementById('pathPreviewContent');
+    if (previewContent) previewContent.textContent = pathParts.join('/');
+  }
+
   function checkDirty() {
     isDirty = true;
+    updatePathPreview();
     const btn = document.getElementById('topSaveBtn');
     btn.classList.add('btn-blink');
     btn.title = 'Save';

@@ -119,11 +119,6 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 });
 
-chrome.commands.onCommand.addListener((command) => {
-  if (command !== 'open_grouper_popup') return;
-  chrome.action?.openPopup?.().catch(() => {});
-});
-
 chrome.downloads.onDeterminingFilename.addListener((item, suggest) => {
   chrome.storage.local.get(null, (result) => {
     if (!result.isEnabled) return suggest();

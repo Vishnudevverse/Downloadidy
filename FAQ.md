@@ -1,7 +1,7 @@
-# FAQ - Downloadidy
+# FAQ - DownPort
 
 **Q: Do I need to manually confirm every download?**
-No! For Downloadidy to work its magic automatically in the background, you should go into your browser settings and disable the option that says *"Ask where to save each file before downloading"*. By doing this, Downloadidy intercepts the download and auto-routes it instantly.
+No! For DownPort to work its magic automatically in the background, you should go into your browser settings and disable the option that says *"Ask where to save each file before downloading"*. By doing this, DownPort intercepts the download and auto-routes it instantly.
 
 **Q: Why did my file go to the "Other" folder?**
 If a file goes to the "Other" folder, it means the extension was completely unable to figure out what domain you were browsing when the file was downloaded. This is rare, but usually happens for deeply embedded system-level links. (Note: Blob/Data downloads from AI sites like ChatGPT or Gemini are fully supported and will not fall into "Other"!).
@@ -25,5 +25,5 @@ Sometimes you want to give a highly specific name to the one file you're about t
 **Q: Does this extension impact browser performance?**
 No. The extension is lightweight and only runs for a brief moment when a download is initiated. It does not run continuously in the background or monitor your browsing activity, so its performance impact is negligible.
 
-**Q: Why doesn't Downloadidy work in Incognito / InPrivate mode?**
-By default, browsers do not allow extensions to run in private windows. If you want Downloadidy to organize files downloaded in Incognito, you must explicitly go to your browser's Manage Extensions page, find Downloadidy, and check "Allow in Incognito/InPrivate".
+**Q: Why doesn't DownPort work in Incognito / InPrivate mode?**
+By default, browsers do not allow extensions to run in private windows. If you want DownPort to organize files downloaded in Incognito, you must explicitly go to your browser's Manage Extensions page, find DownPort, and check "Allow in Incognito/InPrivate".

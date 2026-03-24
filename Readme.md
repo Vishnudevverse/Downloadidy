@@ -1,8 +1,8 @@
-# Downloadidy
+# DownPort
 
 **Take control of your downloads. Automatically route, rename, and organize files based on custom rules, keywords, and domains.**
 
-Downloadidy is a minimal, privacy-friendly download director that keeps your filesystem tidy. It applies smart rules to every download so you spend less time moving and renaming files.
+DownPort is a minimal, privacy-friendly download director that keeps your filesystem tidy. It applies smart rules to every download so you spend less time moving and renaming files.
 
 ![Manifest V3](https://img.shields.io/badge/Manifest-V3-blue)
 ![License](https://img.shields.io/badge/License-MIT-green)
@@ -61,7 +61,7 @@ Downloadidy is a minimal, privacy-friendly download director that keeps your fil
 
 ## How It Works
 
-Downloadidy builds a folder path by applying your rules in order, then appends the filename:
+DownPort builds a folder path by applying your rules in order, then appends the filename:
 
 ```
 [By Domain]/[By Date]/[By File Type]/<filename>
@@ -73,7 +73,7 @@ Example (domain -> date -> type):
 google/2026-Mar/PNG Image/file.png
 ```
 
-If a download URL is `blob:` or `data:`, Downloadidy resolves the domain from your active tab to avoid falling back to `Other`.
+If a download URL is `blob:` or `data:`, DownPort resolves the domain from your active tab to avoid falling back to `Other`.
 
 ## Roadmap
 
@@ -99,7 +99,7 @@ If a download URL is `blob:` or `data:`, Downloadidy resolves the domain from yo
 
 ## Privacy
 
-Downloadidy runs locally in your browser. It does not collect, transmit, or sell personal data. All settings remain on your device.
+DownPort runs locally in your browser. It does not collect, transmit, or sell personal data. All settings remain on your device.
 
 ## License
 

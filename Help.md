@@ -1,6 +1,6 @@
-# Help & Documentation - Downloadidy
+# Help & Documentation - DownPort
 
-Welcome to the Help guide for Downloadidy. Below is an overview of the core features and how to leverage them.
+Welcome to the Help guide for DownPort. Below is an overview of the core features and how to leverage them.
 
 ## UI Breakdown
 
@@ -15,7 +15,7 @@ Welcome to the Help guide for Downloadidy. Below is an overview of the core feat
 
 ## The Rule System
 
-Downloadidy relies on a hierarchical folder system, allowing you to stack conditions to build a smart directory structure. 
+DownPort relies on a hierarchical folder system, allowing you to stack conditions to build a smart directory structure. 
 
 ### Core Rules
 - **By Domain**: Creates a folder named after the website you are downloading from.
@@ -25,14 +25,14 @@ Downloadidy relies on a hierarchical folder system, allowing you to stack condit
 - **Custom Path**: Appends a custom directory structure (like `Work/Projects/`) to your path tree.
 
 ### Drag and Drop
-At the bottom of your extension panel, you will see a list of these rules. By dragging the options up or down, you instruct Downloadidy exactly how the tree should flow. \
+At the bottom of your extension panel, you will see a list of these rules. By dragging the options up or down, you instruct DownPort exactly how the tree should flow. \
 *Example Order: [Date] -> [Domain]* = `2026-Mar/github/file.zip`.
 
 ## Global Mode vs Site Mode
 
-Downloadidy allows you to configure rules that apply **everywhere** (Global), or that apply **only to a dedicated website** (Site-Specific).
+DownPort allows you to configure rules that apply **everywhere** (Global), or that apply **only to a dedicated website** (Site-Specific).
 
-- To customize how a specific website is handled, go to that website, click the Downloadidy extension, uncheck the "Global" toggle, and adjust your rules.
+- To customize how a specific website is handled, go to that website, click the DownPort extension, uncheck the "Global" toggle, and adjust your rules.
 - You can essentially use Site Mode to completely bypass all rules for a single site and direct everything from there to a hard-coded custom folder.
 
 ## Keyword Management
@@ -45,7 +45,7 @@ You can establish powerful mapping triggers to keep chaotic filenames at bay.
 ## Troubleshooting
 
 - **Problem: My downloads are still asking me where to save.**
-  - **Solution:** You must disable "Ask where to save each file before downloading" in your browser's settings. Downloadidy cannot override this browser-level setting.
+  - **Solution:** You must disable "Ask where to save each file before downloading" in your browser's settings. DownPort cannot override this browser-level setting.
 
 - **Problem: A file from a specific site didn't get sorted correctly.**
   - **Solution:** Check if you have site-specific rules enabled for that domain. The rules for that site might be different from your global settings.
